@@ -10,3 +10,23 @@ spring:
           uri: https://www.jd.com
           predicates:
             - Query=url, jd
+
+        - id: product_route
+          uri: lb://gulimall-product
+          predicates:
+            - Path=/api/product/**
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+
+        - id: admin_route
+          uri: lb://renren-fast
+          predicates:
+            - Path=/api/** # 断言，路径相匹配的进行路由
+          filters:
+            - RewritePath=/api/(?<segment>.*), /renren-fast/$\{segment} # 过滤器，路径重写，去掉第一个路径
+
+
+
+
+## 前端项目 /api
+## http://localhost:88/api/captcha.jpg
